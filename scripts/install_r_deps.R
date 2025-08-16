@@ -1,7 +1,7 @@
 pkgs <- c(
-  "shiny", "shinydashboard", "readxl", "dplyr", "ggplot2", "plotly", "tidyr", "DT",
+  "shiny", "shinydashboard", "dplyr", "ggplot2", "plotly", "tidyr", "DT",
   "janitor", "stringr", "scales", "rmarkdown", "broom", "caret", "shinycssloaders",
-  "shinyjs", "shinyWidgets", "thematic", "ranger", "tinytex"
+  "shinyjs", "shinyWidgets", "thematic", "ranger", "tinytex", "rlang"
 )
 
 installed <- rownames(installed.packages())

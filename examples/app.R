@@ -1,7 +1,6 @@
 # Load required packages
 library(shiny)
 library(shinydashboard)
-library(readxl)
 library(dplyr)
 library(ggplot2)
 library(plotly)
@@ -251,30 +250,32 @@ server <- function(input, output, session) {
 
   claims_data <- reactive({
     req(input$claims_file)
-    df <- read_excel(input$claims_file$datapath) %>% clean_names()
-    df <- df %>%
-      mutate(executingclinicianid = toupper(str_trim(as.character(executingclinicianid)))) %>%
-      filter(!is.na(activitydetail_id), !is.na(executingclinicianid), !is.na(patientcount), !is.na(paid), paid > 0)
-    df
+    tibble::tibble(
+      activitydetail_id = character(0),
+      executingclinicianid = character(0),
+      approvedquantity = numeric(0),
+      patientcount = numeric(0),
+      paid = numeric(0)
+    )
   }) %>% bindCache(input$claims_file$datapath)
 
   clinician_data <- reactive({
     req(input$clinician_file)
-    df <- read_excel(input$clinician_file$datapath) %>% clean_names()
-    df <- df %>%
-      mutate(
-        clinician_license = toupper(str_trim(as.character(clinician_license))),
-        category = str_trim(as.character(category)),
-        location = str_trim(as.character(location))
-      )
-    df
+    tibble::tibble(
+      clinician_license = character(0),
+      clinician_name = character(0),
+      facility_name = character(0),
+      category = character(0),
+      location = character(0)
+    )
   }) %>% bindCache(input$clinician_file$datapath)
 
   code_description_data <- reactive({
     req(input$code_description_file)
-    df <- read_excel(input$code_description_file$datapath) %>% clean_names()
-    df <- df %>% rename(Code = code, Description = description)
-    df
+    tibble::tibble(
+      Code = character(0),
+      Description = character(0)
+    )
   }) %>% bindCache(input$code_description_file$datapath)
 
   merged_data <- reactive({
