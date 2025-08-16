@@ -17,6 +17,7 @@ library(shinycssloaders)
 library(shinyjs)
 library(shinyWidgets)
 library(thematic)
+library(rlang)
 
 # Enable auto-theming for ggplotly
 thematic::thematic_shiny()
