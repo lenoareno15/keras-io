@@ -159,3 +159,33 @@ These are the only files that should be edited by hand:
 - `guides/*.py`
 - `theme/*`
 - `scripts/*.py`
+
+## Run the enhanced Shiny app
+
+Requirements: R 4.x with the packages listed below installed.
+
+1. Install R packages (first run only):
+
+```r
+source("scripts/install_r_deps.R")
+# If you plan to render PDF reports for the download button:
+# tinytex::install_tinytex()
+```
+
+2. Launch the app:
+
+```r
+shiny::runApp("examples")
+```
+
+3. In the app, upload your three .xlsx files:
+- claims file (must include columns: `activitydetail_id`, `executingclinicianid`, `approvedquantity`, `patientcount`, `paid`)
+- clinician details (includes `clinician_license`, optional: `clinician_name`, `facility_name`, `category`, `location`)
+- code descriptions (columns: `code`, `description`)
+
+Notes:
+- Use the sidebar tabs to navigate. Click bars to cross-filter (e.g. click a top code to filter `code_select`).
+- Adjust the anomaly threshold slider to control odd claims detection.
+- Change predictors/model under Predictive Analysis to refit live.
+
+Packages used: shiny, shinydashboard, readxl, dplyr, ggplot2, plotly, tidyr, DT, janitor, stringr, scales, rmarkdown, broom, caret, shinycssloaders, shinyjs, shinyWidgets, thematic, ranger, tinytex.

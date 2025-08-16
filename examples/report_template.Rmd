@@ -1,0 +1,56 @@
+---
+title: "Market Analysis Report"
+author: "Dental Claims Analytics"
+output: pdf_document
+params:
+  filtered_data: NA
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(dplyr)
+library(knitr)
+library(scales)
+```
+
+# Summary
+
+This report summarizes the current filtered dataset in the Shiny app.
+
+```{r}
+df <- params$filtered_data
+if (is.null(df) || !nrow(df)) {
+  cat("No data available.")
+} else {
+  kpi <- list(
+    total_paid = sum(df$paid, na.rm = TRUE),
+    total_qty = sum(df$approvedquantity, na.rm = TRUE),
+    total_patients = sum(df$patientcount, na.rm = TRUE)
+  )
+  cat(paste0("Total Expenditure: ", dollar(kpi$total_paid), "\\n"))
+  cat(paste0("Approved Quantity: ", comma(kpi$total_qty), "\\n"))
+  cat(paste0("Patients: ", comma(kpi$total_patients), "\\n"))
+}
+```
+
+# Top Facilities
+
+```{r}
+if (!is.null(df) && nrow(df)) {
+  top_facilities <- df %>% group_by(facility_name) %>%
+    summarise(Paid = sum(paid, na.rm = TRUE), Patients = sum(patientcount, na.rm = TRUE), Claims = sum(approvedquantity, na.rm = TRUE), .groups = "drop") %>%
+    arrange(desc(Paid)) %>% head(20)
+  knitr::kable(top_facilities, caption = "Top 20 Facilities by Paid Amount")
+}
+```
+
+# Top Clinicians
+
+```{r}
+if (!is.null(df) && nrow(df)) {
+  top_clinicians <- df %>% group_by(clinician_name) %>%
+    summarise(Paid = sum(paid, na.rm = TRUE), Patients = sum(patientcount, na.rm = TRUE), Claims = sum(approvedquantity, na.rm = TRUE), .groups = "drop") %>%
+    arrange(desc(Paid)) %>% head(20)
+  knitr::kable(top_clinicians, caption = "Top 20 Clinicians by Paid Amount")
+}
+```
